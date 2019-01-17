@@ -23,15 +23,18 @@ cd RealDeviceMap-LoginLimitEnforcer
 pip install -r requirements.txt
 ```
 
-For python3 users, use `pip3` or `pip3.6` or `pip3.7` depending upon your python flavor, to install requirements
+For python3 users, use `pip3` or `pip3.6` or `pip3.7` depending upon your python flavor you choose to use with RDM-LLE
 
+#### To Run the Script
+
+Simply use `python loginlimit.py` or for python3 `python3 loginlimit.py` etc.
 
 
 ### LoginLimit.py
 
 The default setting are to allow 2 user sessions per account. To increase or decrease the number of allowed sessions, change the `2` in the first SQL Select query to the number of allowed user sessions. Also a person will also need to change the number `2` in the second SQL Select query to the number of user sessions a person wants to allow at one time.
 
-The default time between querying the database is 2 minutes, in seconds. To change this, change `time.sleep(120)` setting to the desired number of seconds between checking the database. These need to be updated in both the last line of `LoginLimit.py` and also in the error section, near the end of `LoginLimit.py`.
+The default time between querying the database is 2 minutes, in seconds. To change this, change `time.sleep(120)` setting to the desired number of seconds between checking the database. These need to be updated in both the last line of `loginlimit.py` and also in the error section, near the end of `loginlimit.py`.
 
 
 #### TODO
