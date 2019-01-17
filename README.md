@@ -25,6 +25,8 @@ pip install -r requirements.txt
 
 For python3 users, use `pip3` or `pip3.6` or `pip3.7` depending upon your python flavor you choose to use with RDM-LLE
 
+All users need to input their RDM database credentials in the `conn = mysql.connector.connect` section to enable the script to interact with your database. 
+
 #### To Run the Script
 
 Simply use `python loginlimit.py` or for python3 `python3 loginlimit.py` etc.
