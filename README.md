@@ -39,15 +39,15 @@ The default setting is to allow two user sessions per account. To increase or de
 The default time between querying the database is 2 minutes, in seconds. To change this, change `time.sleep(120)` setting to the desired number of seconds between checking the database. These need to be updated in both the last line of `loginlimit.py` and also in the error section, near the end of `loginlimit.py`.
 
 
-### Automatic Restart of LoginLimit.py on machine restart.
+### Automatic Restart of LoginLimit.py on machine reboot.
 
-The best way to run LoginLimit.py is in a tmux session. This allows users, especially on a VPS to restart the script automatically and still be able to easily interact and kill the script, if need be.
+The best way to run LoginLimit.py is in a tmux session. tmux allows users, especially on a VPS, to restart the script automatically and still be able to interact and kill the script easily.
 
-If tmux installed in not installed, on a Ubuntu based system, a person can use, `sudo apt-get update` followed by `sudo apt-get install tmux` to install tmux.
+If tmux is not installed, on a Ubuntu based system, a person can use, `sudo apt-get update` followed by `sudo apt-get install tmux` to install tmux.
 
-To accomplish this, we will use the `startLLE.sh` script paired with an `@restart` cron to automatically restart the python script and to put the script in a new window called `LLE` by default. The script path in `startLLE.sh` assumes a person followed the earlier instructions of how to git clone this project. If you put the `loginlimit.py` script in a different directory, you will need to change the path accordingly.
+To accomplish this, we will use the `startLLE.sh` script paired with an `@restart` cron to automatically restart the python script and to put the script in a new tmux session called `LLE` by default. The script path in `startLLE.sh` assumes a person followed the earlier instructions of how to git clone this project. If you put the `loginlimit.py` script in a different directory, you will need to change the path accordingly.
 
-If a person wants to use a different version of python with the script, other than the default, you will have to change the python setting in front of the directory location in the `startLLE.sh` script. If you want to use the default python 3 on your system use `python3` instead of `python` or `python3.6` instead of `python` etc.
+If a person wants to use a different version of python with the script, other than the default, you will have to change the python setting in front of the file path in the `startLLE.sh` script. If you want to use the default python 3 on your system use `python3` instead of `python` or `python3.6` instead of `python` etc.
 
 ##### First
 
@@ -55,18 +55,16 @@ If a person wants to use a different version of python with the script, other th
 
 ##### Second
 
-On Ubuntu based systems, use `crontab -e` to set the task to be run using a cron. To set the start script to run on reboot, scoll to the bottom on the window and add `@reboot /bin/sleep 180; sh ~/RealDeviceMap-LoginLimitEnforcer/startLLE.sh` This tells the cron to run that script on reboot, with a 180 second (3 minute) delay. If your system is faster or slow, you will need to adjust the delay. If no delay is included, the cron may execute too early and the script may fail to open tmux. If your `startLLE.sh` file is in a different location, you will need to adjust the path accordingly.
+On Ubuntu based systems, use `crontab -e` to set the task to be run using a cron. To set the start script to run on reboot, scroll to the bottom on the window and add `@reboot /bin/sleep 180; sh ~/RealDeviceMap-LoginLimitEnforcer/startLLE.sh` This tells the cron to run that script on reboot, with a 180 second (3 minute) delay. If your system is faster or slow, you will need to adjust the delay. If no delay is included, the cron may execute too early and the script may fail to open tmux. If your `startLLE.sh` file is in a different location, you will need to adjust the path accordingly.
 
 ##### Post restart
 
-Upon restart, the `sh.startLLE.sh` script will execute. By default it's set to start a new, detached, tmux session called `LLE`. To connect to this tmux session use `tmux a -t LLE`. To leave the tmux session use `ctrl + b` followed by `d`. This tell tmux to detach from the current session but to keep the script going. To kill the tmux session and thus killing `loginlimit.py` use `tmux kill-session -t LLE`.
-
-In the event the bash script executes and starts the tmux session and starts the `loginlimit.py` before the database server is ready, the script's catch will catch the error and delay for a default of two minutes before attempting to make another connection to the database.
+Upon restart, the `sh.startLLE.sh` script will execute. By default, it's set to start a new, detached, tmux session called `LLE`. To connect to this tmux session after it has started use `tmux a -t LLE`. To leave the tmux session use `ctrl + b` followed by `d`. This tells tmux to detach from the current session but to keep the script going. To kill the tmux session and thus killing `loginlimit.py` use `tmux kill-session -t LLE`.
 
 More background info for those new to tmux. https://hackernoon.com/a-gentle-introduction-to-tmux-8d784c404340
 
 #### TODO
 
--Change the number of allowed concurrent user sessions and the delay in seconds to variables.
+-Change the number of allowed concurrent user sessions and the delay in seconds to variables, that link back to a config for easier setup/changes.
 
 -Setting the user credentials to variables that can be entered at the top of the script, for easier user access.
