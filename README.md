@@ -24,6 +24,7 @@ git clone https://github.com/ftballpack/RealDeviceMap-LoginLimitEnforcer
 cd RealDeviceMap-LoginLimitEnforcer
 pip install -r requirements.txt
 ```
+If the above fails to install correctly for you, you may need to pip install setup tools first. i.e., `sudo pip install setuptools` for regular python/python2.7. If you are using an alternate version of python, you will need use pip with that version of python to install setup tools and the mysql connector. ie., If using python 3.7 you would need to use `sudo pip3.7 install setuptools` followed by `pip3.7 install -r requirements.txt` if setup tools is not already installed on your system.
 
 For python3 users, use `pip3` or `pip3.6` or `pip3.7` depending upon the python flavor you choose to use with RDM-LLE
 
