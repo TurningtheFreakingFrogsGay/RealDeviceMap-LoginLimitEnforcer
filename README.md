@@ -9,13 +9,15 @@ The RDM-LLE script queries the RDM database to find a users' most recently updat
 
 The result, with the default settings, a person is allowed two session tokens, aka logins, at one time when a person logins in again, those sessions when a user has logged in more frequently are kept whereas the older user sessions are deleted.
 
-#### Cases of Known User Abuse
+#### Reducing Database Queries and Increasing the Number of Allowed Users
 
-The default setting for the script is to allow `2` user sessions at once. If a person knows that RDM logins are being abused, it's advised to change the user session to `1` in the database scripts and change the delay in pulling from the database to 30 seconds. More info on that is posted later in this readme. This will not stop users from logging in on 2 separate devices at one time, but will heavily discourage the users from abusing their RDM privileges as users will be continuously logging each other out, when they themselves log in, with shared credentials, to the point where sharing credentials becomes utterly useless.
+The default setting for the script is to allow `1` user session at once while checking the database every 30 seconds for anyone who is over the session limit. Increasing the time between loops will decrease the overall number of queries to the database and reduce any database strain that may be occurring with the combination of tools such as Novabot, Pokebot, RDM-Tools, combined with the RDM-LLE script on the database. Increasing the run time to 120 seconds between loops will reduce DB queries to 1/4 of the default setting, thus, if a database is under strain, raising the time between loops can be a simple way to alleviate some of the stress on the database.
+
+If a person wants to increase the number of allowed concurrent user session per account, follow the instructions in the LoginLimit.py section of this readme. 
 
 ## Install
 
-Compatible and tested with python2.7, python3.5, and python3.6 although print out formatting is better with python3.5+
+Compatible and tested with python2.7, python3.5, and python3.6 although print out formatting and mysql error codes display better with python3.5+
 
 ```
 git clone https://github.com/ftballpack/RealDeviceMap-LoginLimitEnforcer
@@ -34,9 +36,9 @@ Simply use `python loginlimit.py` or for python3 `python3 loginlimit.py` etc.
 
 ### LoginLimit.py
 
-The default setting is to allow two user sessions per account. To increase or decrease the number of allowed sessions, change the `2` in the first SQL Select query to the number of allowed user sessions. Also, a person will also need to change the number `2` in the second SQL Select query to the number of user sessions a person wants to allow at one time.
+The default setting is to allow one user sessions per account. To increase or decrease the number of allowed sessions, change the `1` in the first SQL Select query to the number of allowed user sessions. Also, a person will also need to change the number `1` in the second SQL Select query to the number of user sessions a person wants to allow at one time.
 
-The default time between querying the database is 2 minutes, in seconds. To change this, change `time.sleep(120)` setting to the desired number of seconds between checking the database. These need to be updated in both the last line of `loginlimit.py` and also in the error section, near the end of `loginlimit.py`.
+The default time between querying the database is 30 seconds. To change this, change `time.sleep(30)` setting to the desired number of seconds between checking the database. These need to be updated in both the last line of `loginlimit.py` and also in the error section, near the end of `loginlimit.py`.
 
 
 ### Automatic Restart of LoginLimit.py on machine reboot.
