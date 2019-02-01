@@ -10,11 +10,12 @@ while True:
      conn = mysql.connector.connect(host='localhost',
                                database='rdmdb',
                                user='AccountWithPermissiontoModifytheDB',
-                               password='YourStrongPassword')
+                               password='YourStrongPassword',
+                               port='3306')
 
 
      #Query to find token of users over the set limit of logins
-     sql_select_Query = "SELECT `token` FROM web_session WHERE `userid` IN (SELECT `userid` From (SELECT `userid` FROM web_session WHERE `userid` != '' GROUP BY `userid` HAVING COUNT(*) > 1)t);"
+     sql_select_Query = "SELECT `token` FROM web_session WHERE `userid` IN (SELECT `userid` FROM (SELECT `userid` FROM web_session WHERE `userid` != '' GROUP BY `userid` HAVING COUNT(*) > 1)t);"
      cursor = conn.cursor()
      cursor.execute(sql_select_Query)
      alltokens = cursor.fetchall()
