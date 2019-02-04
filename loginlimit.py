@@ -1,5 +1,18 @@
 #!/usr/bin/env python
 
+#User config settings, change here
+number_of_concurrent_allowed_user_sessions_per_account = 1
+time_in_seconds_between_check_cycles = 30
+
+#DB config settings
+host = 'localhost'
+database = 'rdmdb'
+user = 'AccountWithPermissiontoModifytheDB'
+password = 'YourStrongPassword'
+port = '3306'
+
+#Do not edit below this line unless you know what you are doing.
+
 import datetime
 import time
 import mysql.connector
@@ -7,23 +20,23 @@ from mysql.connector import Error
 
 while True:
   try:
-     conn = mysql.connector.connect(host='localhost',
-                               database='rdmdb',
-                               user='AccountWithPermissiontoModifytheDB',
-                               password='YourStrongPassword',
-                               port='3306')
+     conn = mysql.connector.connect(host=host,
+                               database=database,
+                               user=user,
+                               password=password,
+                               port=port)
 
 
      #Query to find token of users over the set limit of logins
-     sql_select_Query = "SELECT `token` FROM web_session WHERE `userid` IN (SELECT `userid` FROM (SELECT `userid` FROM web_session WHERE `userid` != '' GROUP BY `userid` HAVING COUNT(*) > 1)t);"
+     sql_select_Query = "SELECT `token` FROM web_session WHERE `userid` IN (SELECT `userid` FROM (SELECT `userid` FROM web_session WHERE `userid` != '' GROUP BY `userid` HAVING COUNT(*) > %s)t);"
      cursor = conn.cursor()
-     cursor.execute(sql_select_Query)
+     cursor.execute(sql_select_Query, (number_of_concurrent_allowed_user_sessions_per_account , ))
      alltokens = cursor.fetchall()
 
      #Query to find the tokens of the latest updated user sessions for all users
-     sql_select_Query2 = "SELECT `token` FROM web_session s WHERE ( SELECT COUNT(*) FROM web_session f WHERE f.userid = s.userid AND f.updated >= s.`updated` ) <= 1 AND `userid` != '' ORDER BY `s`.`updated` DESC;"
+     sql_select_Query2 = "SELECT `token` FROM web_session s WHERE ( SELECT COUNT(*) FROM web_session f WHERE f.userid = s.userid AND f.updated >= s.`updated` ) <= %s AND `userid` != '' ORDER BY `s`.`updated` DESC;"
      cursor = conn.cursor()
-     cursor.execute(sql_select_Query2)
+     cursor.execute(sql_select_Query2, (number_of_concurrent_allowed_user_sessions_per_account , ))
      recenttokens = cursor.fetchall()
 
      #for printing out text for testing query results
@@ -62,7 +75,7 @@ while True:
       now = datetime.datetime.now()
       print (now.strftime("%H:%M:%S, %Y-%m-%d"))
       conn.rollback()
-      time.sleep(30)
+      time.sleep(time_in_seconds_between_check_cycles)
 
   finally:
       #closing database connection.
@@ -72,4 +85,4 @@ while True:
           print("Script Succesfully Ran at: ")
           now = datetime.datetime.now()
           print (now.strftime("%H:%M:%S, %Y-%m-%d"))
-          time.sleep(30)
+          time.sleep(time_in_seconds_between_check_cycles)
