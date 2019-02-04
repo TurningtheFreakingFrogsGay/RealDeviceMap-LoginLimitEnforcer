@@ -7,11 +7,11 @@ The RDM-LLE script was written to query the RDM database for the number of user 
 
 The RDM-LLE script queries the RDM database to find a users' most recently updated session tokens and reserves those while deleting those over the set limit of sessions a person may have.
 
-The result, with the default settings, a person is allowed two session tokens, aka logins, at one time when a person logins in again, those sessions when a user has logged in more frequently are kept whereas the older user sessions are deleted.
+The result, with the default settings, a person is allowed one session token, aka logins, at one time. When a person logins in again, the session(s) where a user has logged in more frequently are kept whereas the older user sessions are deleted.
 
 #### Reducing Database Queries and Increasing the Number of Allowed Users
 
-The default setting for the script is to allow `1` user session at once while checking the database every 30 seconds for anyone who is over the session limit. Increasing the time between loops will decrease the overall number of queries to the database and reduce any database strain that may be occurring with the combination of tools such as Novabot, Pokebot, RDM-Tools, combined with the RDM-LLE script on the database. Increasing the run time to 120 seconds between loops will reduce DB queries to 1/4 of the default setting, thus, if a database is under strain, raising the time between loops can be a simple way to alleviate some of the stress on the database.
+The default setting for the script is to allow `1` user session at once while checking the database every 30 seconds for anyone who is over the session limit. Increasing the time between loops will decrease the overall number of queries to the database and reduce any database strain that may be occurring with the combination of tools such as Novabot, RDM-Tools, combined with the RDM-LLE script on the database. Increasing the run time to 120 seconds between loops will reduce DB queries to 1/4 of the default setting, thus, if a database is under strain, raising the time between loops can be a simple way to alleviate some of the stress on the database.
 
 If a person wants to increase the number of allowed concurrent user session per account, follow the instructions in the LoginLimit.py section of this readme. 
 
@@ -28,7 +28,7 @@ If the above fails to install correctly for you, you may need to pip install set
 
 For python3 users, use `pip3` or `pip3.6` or `pip3.7` depending upon the python flavor you choose to use with RDM-LLE
 
-All users need to input their RDM database credentials in the `conn = mysql.connector.connect` section to enable the script to interact with your database. 
+All users need to input their RDM database credentials in the DB config section to enable the script to interact with your database. 
 
 #### To Run the Script
 
@@ -37,12 +37,12 @@ Simply use `python loginlimit.py` or for python3 `python3 loginlimit.py` etc.
 
 ### LoginLimit.py
 
-The default setting is to allow one user sessions per account. To increase or decrease the number of allowed sessions, change the `1` in the first SQL Select query to the number of allowed user sessions. Also, a person will also need to change the number `1` in the second SQL Select query to the number of user sessions a person wants to allow at one time.
+The default setting is to allow one user sessions per account. To increase or decrease the number of allowed sessions, change the config setting for the variable `number_of_concurrent_allowed_user_sessions_per_account` to the desired number of allowed users sessions. Changing the number in this variable will automatically make the proper adjustments for the rest of the sql queries to allow up to the limit of user sessions, per id, a person wants to allow.
 
-The default time between querying the database is 30 seconds. To change this, change `time.sleep(30)` setting to the desired number of seconds between checking the database. These need to be updated in both the last line of `loginlimit.py` and also in the error section, near the end of `loginlimit.py`.
+The default time between querying the database is 30 seconds. To change this, change the `time_in_seconds_between_check_cycles` from 30 to the desired number of cycles desired for the script to check before querying the database again.
 
 
-### Automatic Restart of LoginLimit.py on machine reboot.
+### Automatic Restart of LoginLimit.py on machine reboot.(Instructions for headless Ubuntu installs)
 
 The best way to run LoginLimit.py is in a tmux session. tmux allows users, especially on a VPS, to restart the script automatically and still be able to interact and kill the script easily.
 
