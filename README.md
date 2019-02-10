@@ -11,7 +11,7 @@ The result, with the default settings, a person is allowed one session token, ak
 
 #### Reducing Database Queries and Increasing the Number of Allowed Users
 
-The default setting for the script is to allow `1` user session at once while checking the database every 30 seconds for anyone who is over the session limit. Increasing the time between loops will decrease the overall number of queries to the database and reduce any database strain that may be occurring with the combination of tools such as Novabot, RDM-Tools, combined with the RDM-LLE script on the database. Increasing the run time to 120 seconds between loops will reduce DB queries to 1/4 of the default setting, thus, if a database is under strain, raising the time between loops can be a simple way to alleviate some of the stress on the database.
+The default setting for the script is to allow `1` user session at once while checking the database every 30 seconds for anyone who is over the session limit. Increasing the time between loops will decrease the overall number of queries to the database and reduce any database strain that may be occurring with the combination of tools such as Novabot, RDM-Tools, combined with the RDM-LLE script on the database. Increasing the run time to 120 seconds between loops will reduce DB queries thus, if a database is under strain, raising the time between loops can be a simple way to alleviate some of the stress on the database.
 
 If a person wants to increase the number of allowed concurrent user session per account, follow the instructions in the LoginLimit.py section of this readme. 
 
